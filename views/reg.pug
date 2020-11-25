@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    div(class="container mt-5")
+        h1= pageTitle
+        form(action="/reg" method="POST")
+            div(class="form-group")
+                label(for="username")
+                input(type="text" class="form-control" name="username" id="username" placeholder="Enter username")
+            div(class="form-group")
+                label(for="email")
+                input(type="email" class="form-control" name="email" id="email" placeholder="Enter email")
+            div(class="form-group")
+                label(for="password")
+                input(type="password" class="form-control" name="password" id="password" placeholder="Password")
+            button(type="submit" class="btn btn-primary") Зарегистрироваться

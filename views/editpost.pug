@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    
+    h1= 'Редактирование поста' + ' ' + articleTitle
+    form(action="/save" method="POST")
+        div(class="form-group")
+            label(for="theme") Тема поста
+            select(id="theme" name="theme" class="custom-select")
+                option(selected)= articleTheme
+                option(value="Новости" name="Новости") Новости
+                option(value="Личное" name="Личное") Личное
+                option(value="Путешествия" name="Путешествия") Путешествия
+                option(value="Животные" name="Животные") Животные
+                option(value="Галерея" name="Галерея") Галерея
+                option(value="Природа" name="Природа") Природа
+                option(value="Политика" name="Политика") Политика
+                option(value="Спорт" name="Спорт") Спорт
+                option(value="Технологии" name="Технологии") Технологии
+        div(class="form-group")
+            label(for="post-head") Заголовок поста
+            input(type="text" class="form-control" id="post-head" name="postHead" value=articleTitle)
+        div(class="form-group")
+            label(for="post-text") Текст поста
+            textarea(type="text" class="form-control" id="post-text" name="postText" wrap="hard" cols="50" rows="20")= articleText
+        input(type="hidden", name="id" value=articleId)
+        button(type="submit" class="btn btn-primary") Сохранить

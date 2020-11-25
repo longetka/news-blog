@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1 Добавить новый пост
+    form(action="/create" method="POST")
+        div(class="form-group")
+            label(for="theme") Тема поста
+            select(id="theme" name="theme" class="custom-select")
+                option(selected) Выберите тему поста
+                option(value="Новости" name="Новости") Новости
+                option(value="Личное" name="Личное") Личное
+                option(value="Путешествия" name="Путешествия") Путешествия
+                option(value="Животные" name="Животные") Животные
+                option(value="Галерея" name="Галерея") Галерея
+                option(value="Природа" name="Природа") Природа
+                option(value="Политика" name="Политика") Политика
+                option(value="Спорт" name="Спорт") Спорт
+                option(value="Технологии" name="Технологии") Технологии
+        div(class="form-group")
+            label(for="post-head") Заголовок поста
+            input(type="text" class="form-control" id="post-head" name="postHead")
+        div(class="form-group")
+            label(for="post-text") Текст поста
+            textarea(type="text" class="form-control" id="post-text" name="postText" wrap="hard" cols="50" rows="20")
+        button(type="submit" class="btn btn-primary") Создать
