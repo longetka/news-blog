@@ -74,9 +74,9 @@ router.post('/save', async (req, res) => {
 })
 
 // User page
-// router.get('/reg', (req, res) => {
-//   res.render('reg', {pageTitle: "Регистрация пользователя"});
-// });
+router.get('/reg', (req, res) => {
+  res.render('reg', {pageTitle: "Регистрация пользователя"});
+});
 
 router.post('/reg', async (req, res) => {
   let user = new User({
@@ -84,10 +84,13 @@ router.post('/reg', async (req, res) => {
     email: req.body.email,
     password: req.body.password
   })
-
   const savedUser = await user.save();
-  res.send(savedUser);
+  res.redirect('/login');
 });
+
+router.get('/login', (req, res) => {
+  res.render('login')
+})
 
 // router.get('/login', (req, res) => {
 //   const email = req.body.email;

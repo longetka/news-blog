@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    //- Main page Header
     header(class="blog-header py-3")
         div(class="row flex-nowrap justify-content-between align-items-center")
             div(class="col-4 pt-1")
@@ -14,19 +15,9 @@ block content
                         circle(cx="10.5" cy="10.5" r="7.5")
                         path(d="M21 21l-5.2-5.2")
                 div(class="btn-group")
-                    button(type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false") Войти
-                    div(class="dropdown-menu dropdown-menu-left dropdown-menu-xl-right")
-                        form(action="/login" method="POST" class="px-4 py-3")
-                            div(class="form-group")
-                                label(for="email") Почта для входа
-                                input(id="email" type="email" name="email" class="form-control" placeholder="email@example.com")
-                            div(class="form-group")
-                                label(for="password") Пароль
-                                input(id="password" type="password" class="form-control" name="password" placeholder="Password")
-                            button(type="submit" class="btn btn-primary") Войти
-                        a(href="/reg") Регистрация
+                    a(href="/login" class="btn btn-outline-secondary") Войти
 
-
+    //- Sorted by Theme
     div(class="nav-scroller py-1 mb-2")
         nav(class="nav d-flex justify-content-between")
             a(class="p-2 text-muted" href="/theme/Новости") Новости
@@ -38,12 +29,13 @@ block content
             a(class="p-2 text-muted" href="/theme/Политика") Политика
             a(class="p-2 text-muted" href="/theme/Спорт") Спорт
             a(class="p-2 text-muted" href="/theme/Техонологии") Техонологии
-    // This button visible for Admin only
+    
+    //- This button visible for Admin only
     div(class="container")
         a(href="/addpost" class="btn btn-success") Добавить новый пост
 
-    // Iterate Database article
-
+    
+    //- Iterate Database articles
     main(role="main" class="container")
         div(class="row")
             div(class="col-md-12 blog-main")

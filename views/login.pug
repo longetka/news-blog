@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h1 Войти
+    form(action="/login" method="POST")
+        div(class="input-group mb-3")
+            div(class="input-group-prepend")
+                span(class="input-group-text" id="basic-addon1") @
+            input(
+                type="text"
+                class="form-control"
+                placeholder="Email"
+                aria-label="Email"
+                aria-describedby="basic-addon1"
+                )
+        div(class="input-group mb-3")
+            div(class="input-group-prepend")
+                span(class="input-group-text" id="basic-addon1") ##
+            input(
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
+                )
+        button(type="submit" class="btn btn-primary mb-3") Войти
+    a(href="/reg") Зарегистрируйтесь, если у Вас еще нет аккаунта
