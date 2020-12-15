@@ -13,10 +13,12 @@ const user = new Schema({
   },
   name: {
     type: String,
+    lowercase: true,
     required: true
   },
   email: {
     type: String,
+    lowercase: true,
     required: true
   },
   password: {
@@ -27,15 +29,3 @@ const user = new Schema({
 });
 
 module.exports = model('user', user);
-
-// module.exports.getUserByEmail = function(email, callback) {
-//   const query = {email: email};
-//   user.findOne(query, callback);
-// };
-
-// module.exports.comparePass = function(passFromDb, userPass, callback) {
-//   bcrypt.compare(passFromDb, userPass, (err, isMatch) => {
-//     if (err) throw err;
-//     callback(null, isMatch);
-//   })
-// }

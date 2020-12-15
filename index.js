@@ -1,21 +1,17 @@
 const express = require("express");
+const app = express();
 const mongoose = require("mongoose");
-const passport = require('passport');
 const path = require("path");
-const { db, PORT } = require("./config/config")
+const cookieParser = require('cookie-parser');
+const { db, PORT } = require("./config/config");
 const router = require('./routes/routes');
 
 const port = process.env.PORT || PORT;
-const app = express();
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-require('./config/passport')(passport);
 
 app.set('view engine', 'pug');
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(router);
 
 (async function startApp() {

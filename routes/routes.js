@@ -2,14 +2,16 @@ const { Router } = require("express");
 const router = Router();
 const Article = require('../model/article');
 const User = require('../model/user');
-const passport = require('passport');
+const verify = require('./verifyToken');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
 // Main page
 router.get('/', async (req, res) => {
+  const token = req.cookies.token;
+  console.log(JSON.stringify(token));
   const post = await Article.find({});
-  res.render('main', { pageTitle: "My Blog", post})
+  return res.render('main', { pageTitle: "My Blog", post, token})
 });
 
 router.get('/theme/:theme', async (req, res) => {
@@ -18,11 +20,11 @@ router.get('/theme/:theme', async (req, res) => {
 });
 
 // Articles page
-router.get('/addpost', (req, res) => {
+router.get('/addpost', verify, (req, res) => {
   res.render('addpost', { pageTitle: "Добавление поста" })
 });
 
-router.post('/create', async (req, res) => {
+router.post('/create', verify, async (req, res) => {
   const model = new Article({
     head: req.body.postHead,
     text: req.body.postText,
@@ -33,7 +35,7 @@ router.post('/create', async (req, res) => {
   res.redirect('/')
 });
 
-router.post('/delete', async (req, res) => {
+router.post('/delete', verify, async (req, res) => {
   Article.deleteOne({_id: req.body.id}, (err, res) => {
     if (err) return console.log(err);
     console.log(res);
@@ -41,7 +43,7 @@ router.post('/delete', async (req, res) => {
   res.redirect('/');
 });
 
-router.post('/edit', async (req, res) => {
+router.post('/edit', verify, async (req, res) => {
   await Article.findOne({_id: req.body.id}, (err, response) => {
     if (err) return console.log(err);
     return res.render(
@@ -55,7 +57,7 @@ router.post('/edit', async (req, res) => {
   })
 })
 
-router.post('/save', async (req, res) => {
+router.post('/save', verify, async (req, res) => {
   const articleId = req.body.id
   await Article.findOneAndUpdate(
     {_id: articleId},
@@ -90,38 +92,30 @@ router.post('/reg', async (req, res) => {
 
 router.get('/login', (req, res) => {
   res.render('login')
-})
+});
 
-// router.get('/login', (req, res) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
+router.post('/login', async (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+  await User.findOne({email: email}, (err, response) => {
+    if (err) return console.log(err);
+    console.log(response)
+    if (response === null) {
+      return res.send(`Такой пользователь не существует`)
+    } else if (password !== response.password) {
+        return res.send(`Неверно введен пароль`)
+    } else if (email === response.email && password === response.password) {
+      const token = jwt.sign({_id: response._id}, config.secret, {algorithm: "HS256"}, (err, token) => {
+        if (err) return console.log(err);
+        res.cookie('token', token, { expires: new Date(Date.now() + 604800) }).redirect('/')
+      })
+    }
+  })
+});
 
-//   User.getUserByEmail(login, (err, user) => {
-//     if (err) throw err;
-//     if (!user)  
-//       return res.json({success: false, msg: "Такой пользователь не был найден"});
-    
-//       User.comparePass(password, user.password, (err, isMatch) => {
-//         if (err) throw err;
-//         if (isMatch) {
-//           const token = jwt.sign(user, config.secret, {
-//             expiresIn: 3600 * 24
-//           });
-
-//           res.json({
-//             success: true,
-//             token: 'JWT ' + token,
-//             user: {
-//               id: user._id,
-//               name: user.username,
-//               email: user.email
-//             }
-//           })
-//         } else {
-//           return res.json({success: false, msg: "Пароли не совпадают"})
-//         }
-//       });
-//   });
-// })
+router.get('/logout', (req, res) => {
+  res.clearCookie('token', {expires: 0})
+  res.redirect('/')
+});
 
 module.exports = router;

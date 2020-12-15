@@ -15,7 +15,10 @@ block content
                         circle(cx="10.5" cy="10.5" r="7.5")
                         path(d="M21 21l-5.2-5.2")
                 div(class="btn-group")
-                    a(href="/login" class="btn btn-outline-secondary") Войти
+                    if token
+                        a(href="/logout" class="btn btn-outline-secondary") Выйти
+                    else
+                        a(href="/login" class="btn btn-outline-secondary") Войти
 
     //- Sorted by Theme
     div(class="nav-scroller py-1 mb-2")
@@ -32,7 +35,8 @@ block content
     
     //- This button visible for Admin only
     div(class="container")
-        a(href="/addpost" class="btn btn-success") Добавить новый пост
+        if token
+            a(href="/addpost" class="btn btn-success") Добавить новый пост
 
     
     //- Iterate Database articles
@@ -43,13 +47,14 @@ block content
                 div(class="blog-post")
                     each elem in post
                         h2(class="blog-post-title justify-content-between")= elem.head
-                        span(style="display: inline-flex;")
-                            form(action="/delete" method="POST")
-                                input(type="hidden" value=elem._id name="id")
-                                button(class="btn btn-danger btn-sm" type="submit") Удалить
-                            form(action="/edit" method="POST")
-                                input(type="hidden" value=elem._id name="id")
-                                button(class="btn btn-warning btn-sm" type="submit") Редактировать
+                        if token
+                            span(style="display: inline-flex;")
+                                form(action="/delete" method="POST")
+                                    input(type="hidden" value=elem._id name="id")
+                                    button(class="btn btn-danger btn-sm" type="submit") Удалить
+                                form(action="/edit" method="POST")
+                                    input(type="hidden" value=elem._id name="id")
+                                    button(class="btn btn-warning btn-sm" type="submit") Редактировать
                         - var options = { day: "numeric", weekday: "long", month: "long", year: "numeric" }
                         p(class="blog-post-meta")= elem.date.toLocaleString('en-US', options) + ' ' + ' по теме '
                             a(href="/theme/"+elem.theme)= elem.theme
